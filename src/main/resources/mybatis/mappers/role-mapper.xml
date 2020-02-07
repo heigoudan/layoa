@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.situ.layoa.role.dao.RoleDao">
+
+<insert id="add"  parameterType="Role" useGeneratedKeys="true" keyColumn="ROW_ID" keyProperty="rowId">
+INSERT INTO tb_role (ROLE_CODE,ROLE_NAME,ROLE_KIND,ROLE_INFO)VALUES(
+#{roleCode},#{roleName},#{roleKind},#{roleInfo})
+</insert>
+
+<select id="findName" resultType="Role" >
+SELECT ROW_ID  FROM tb_role WHERE ROLE_NAME = #{Name}
+</select>
+
+
+
+
+</mapper>
