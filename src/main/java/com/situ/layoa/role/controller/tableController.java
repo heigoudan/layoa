@@ -34,10 +34,15 @@ public class tableController implements Serializable{
 		return modelAndView;
 	}
 	
-	@GetMapping("role/edit/{rowId}")
-	public ModelAndView edit(ModelAndView modelAndView,@PathVariable Long rowId) {
-		modelAndView.addObject("Role",roleService.findRole(rowId) );
+	@GetMapping("role/edit")
+	public ModelAndView edit(ModelAndView modelAndView) {
+		
 		modelAndView.setViewName("/role-add");
 		return modelAndView;
+	}
+	@GetMapping("role/{rowId}")
+	public Role findRole(@PathVariable Long rowId) {
+		return roleService.findRole(rowId) ;
+
 	}
 }

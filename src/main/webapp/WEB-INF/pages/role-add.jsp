@@ -5,15 +5,15 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">角色编号</label>
 			<div class="layui-input-block">
-				<input name="roleCode" required lay-verify="required"  value="${Role.roleCode }"
+				<input name="roleCode" required lay-verify="required"  
 					placeholder="请输入角色编号" autocomplete="off" class="layui-input">
 			</div>
 		</div>
 		<div class="layui-form-item">
 			<label class="layui-form-label">角色名称</label>
 			<div class="layui-input-inline">
-				<input name="roleName" required lay-verify="required|checkstuname" value="${Role.roleName }"
-					placeholder="请输入角色名称" autocomplete="off" class="layui-input">
+				<input name="roleName" id="roleName"  lay-verify="required|checkstuname" 
+					placeholder="请输入角色名称" autocomplete="off" class="layui-input" >
 			</div>
 		</div>
 		
@@ -31,7 +31,7 @@
 		<div class="layui-form-item">
 			<label class="layui-form-label">角色简介</label>
 			<div class="layui-input-inline">
-				<input name="roleInfo" required lay-verify="required" value="${Role.roleInfo }"
+				<input name="roleInfo" required lay-verify="required" 
 					placeholder="请输入角色简介" autocomplete="off" class="layui-input">
 			</div>
 		</div>
@@ -70,7 +70,15 @@ layui.js 按需加载模块
 		form.verify({
 			checkstuname:function(value,item){//value ,表单的值，item 表单的DOM对象
 				var msg ;
+				//console.log(item);
+			//判断是否需要进行自定义校验  点击修改的时候加了一个属性
+			var oldVal =  $(item).data('old');
 			
+			
+			//如果原来的值有数据，并且原值和当前的一样，则不需要进行唯一性校验
+			if(oldVal !=null && oldVal == value){
+				return msg;
+			}else{
 			$.ajax({
 				type:'get',
 				async:false, //为了让layui可以做唯一性的校验，需要将ajax异步提交关闭
@@ -84,7 +92,7 @@ layui.js 按需加载模块
 				}
 			});
 			return msg;
-				
+			}
 			}
 		});
 		

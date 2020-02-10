@@ -15,11 +15,11 @@
 	<form class="layui-form" lay-filter="form_find" id="form_find">
 		<div class="layui-form-item">
 			<div class="layui-input-inline">
-				<input name="roleCode" required id="roleCode" placeholder="请输入角色编号"
+				<input name="roleCode" required  placeholder="请输入角色编号"
 					autocomplete="off" class="layui-input">
 			</div>
 			<div class="layui-input-inline">
-				<input name="roleName" required id="roleName" placeholder="请输入角色名称"
+				<input name="roleName" required  placeholder="请输入角色名称"
 					autocomplete="off" class="layui-input">
 			</div>
 
@@ -125,7 +125,9 @@
 
 						success : function(result) {
 							if (result) {
-								obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+								table.reload('demo');
+								
+								//obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
 								layer.close(index);
 							}
 						}
@@ -135,17 +137,34 @@
 			}
 			if (layEvent === 'edit') { //修改
 				$.ajax({
-					url : 'role/edit/' + data.rowId,
+					url : 'role/edit',
 					success : function(htmlData) {
 						layer.open({
 							type : 1,
-							title : '新增用户',
+							title : '修改用户',
 							area : '800px',//设置宽度 ，高度自适应
 							content : htmlData,
 							success : function() {//layer打开成功后的回调
-								//让form表单渲染一下，
-								form.render(null, 'form_user');
+								$.ajax({
+									type : 'get',
+									url : 'role/'+data.rowId,
+									success : function(role){
+										//让form表单渲染一下，
+										//给表单赋值
+										form.val("form_user",role);
+										//新加一个属性 为了修改的时候名字不变不执行唯一校验
+										$('#roleName').data('old',role.roleName);
+									//	alert($('#roleName').data('old'));
+										form.render(null, 'form_user');
 
+									}
+								})
+								
+								
+								
+								
+								
+								
 							}
 						})
 					}
@@ -179,52 +198,15 @@
 		})
 
 		$('#btn_find').on('click', function() {
-			table.render({
-				elem : '#demo' //要绑定的页面元素
-				// ,height: 312 //设置高度
-				,
-				url : 'role/' //数据接口
-				,
-				page : true //开启分页
-				,
-				where : $('#form_find').serialize(),
-				cols : [ [ //表头
-				{
-					field : 'rowId',
-					title : 'ID',
-					width : 180,
-					sort : true,
-					fixed : 'left'
-				}, {
-					field : 'roleCode',
-					title : '角色编号',
-					width : 180
-				}, {
-					field : 'roleName',
-					title : '角色名称',
-					width : 180,
-					sort : true
-				}, {
-					field : 'roleKind',
-					title : '角色类型',
-					width : 180,
-					templet : '#userKindTpl'
-				}, {
-					field : 'roleInfo',
-					title : '角色简介',
-					width : 177
-				}, {
-					title : '操作',
-					width : 177,
-					templet : '#barDemo'
-				}
-				/*  ,{field: 'experience', title: '积分', width: 80, sort: true}
-				  ,{field: 'score', title: '评分', width: 80, sort: true}
-				  ,{field: 'classify', title: '职业', width: 80}
-				  ,{field: 'wealth', title: '财富', width: 135, sort: true}*/
-				] ]
-			});
 			
+			//查询渲染table数据
+			table.reload('demo',{
+				page: {
+					curr: 1//重新从第一页开始
+				}
+			,where : $('#form_find').serialize(),
+			},'data');
+			return false;
 			
 			
 			
